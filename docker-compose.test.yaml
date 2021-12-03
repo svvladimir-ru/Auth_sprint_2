@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  sut:
+    container_name: auth-tests
+    build:
+      context: .
+      target: tests
+    volumes:
+      - ./src:/code
+      - ./shared:/code/shared
+      - ./shared/logs:/code/shared/logs
+    env_file:
+      - .env.sample
+    environment:
+      - DEBUG=False
+      - TESTING=True
+      - POSTGRES_HOST=test-auth-postgres
+
+  test-db:
+    image: postgres:13
+    container_name: test-auth-postgres
+    env_file:
+      - .env.sample
+    expose:
+      - "5432"
